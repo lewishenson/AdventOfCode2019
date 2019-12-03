@@ -6,7 +6,7 @@ namespace AdventOfCode2019
     {
         static void Main(string[] args)
         {
-            var puzzle = new Puzzles.Day01.Puzzle1();
+            var puzzle = new Puzzles.Day01.Puzzle2();
             var answer = puzzle.Solve();
             Console.WriteLine(answer);
         }
