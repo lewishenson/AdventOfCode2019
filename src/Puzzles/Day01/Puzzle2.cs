@@ -4,7 +4,7 @@ using AdventOfCode2019.Puzzles;
 
 namespace AdventOfCode2019.Puzzles.Day01
 {
-    public class Puzzle1 : IPuzzle
+    public class Puzzle2 : IPuzzle
     {
         public int Solve()
         {
@@ -19,7 +19,19 @@ namespace AdventOfCode2019.Puzzles.Day01
 
         private int CalculateFuel(int mass)
         {
-            return (mass / 3) - 2;
+            var fuel = (mass / 3) - 2;
+
+            if (fuel < 0)
+            {
+                fuel = 0;
+            }
+            else
+            {
+                var fuelForFuel = CalculateFuel(fuel);
+                fuel += fuelForFuel;
+            }
+
+            return fuel;
         }
     }
 }
