@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using AdventOfCode2019.Puzzles;
 
 namespace AdventOfCode2019
 {
@@ -6,9 +8,27 @@ namespace AdventOfCode2019
     {
         static void Main(string[] args)
         {
-            var puzzle = new Puzzles.Day01.Puzzle2();
-            var answer = puzzle.Solve();
-            Console.WriteLine(answer);
+            Console.WriteLine("ADVENT OF CODE 2019");
+
+            Console.WriteLine("Enter day number:");
+            var dayNumber = Console.ReadLine();
+
+            Console.WriteLine("Enter puzzle number:");
+            var puzzleNumber = Console.ReadLine();
+
+            var puzzle = PuzzleFactory.Create(dayNumber, puzzleNumber);
+
+            if (puzzle == null)
+            {
+                Console.WriteLine("Puzzle not yet solved!");
+            }
+            else
+            {
+                var answer = puzzle.Solve();
+
+                Console.WriteLine("Answer:");
+                Console.WriteLine(answer);
+            }
         }
     }
 }
