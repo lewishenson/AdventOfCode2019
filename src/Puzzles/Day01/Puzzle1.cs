@@ -1,6 +1,5 @@
 using System.IO;
 using System.Linq;
-using AdventOfCode2019.Puzzles;
 
 namespace AdventOfCode2019.Puzzles.Day01
 {
