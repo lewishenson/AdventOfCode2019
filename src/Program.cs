@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using AdventOfCode2019.Puzzles;
 
@@ -24,9 +25,11 @@ namespace AdventOfCode2019
             }
             else
             {
+                var stopwatch = Stopwatch.StartNew();
                 var answer = puzzle.Solve();
+                stopwatch.Stop();
 
-                Console.WriteLine("Answer:");
+                Console.WriteLine($"Answer: (calculated in {stopwatch.ElapsedMilliseconds}ms)");
                 Console.WriteLine(answer);
             }
         }
