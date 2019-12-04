@@ -17,8 +17,4 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Puzzles\Day03\" />
-  </ItemGroup>
-
 </Project>

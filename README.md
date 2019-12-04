@@ -7,7 +7,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 |-----|----------|----------|
 | 1   | Solved   | Solved   |
 | 2   | Solved   | Solved   |
-| 3   | Solved   |          |
+| 3   | Solved   | Solved   |
 | 4   |          |          |
 
 ## To Run
