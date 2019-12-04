@@ -6,7 +6,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | Day | Puzzle 1 | Puzzle 2 |
 |-----|----------|----------|
 | 1   | Solved   | Solved   |
-| 2   |          |          |
+| 2   | Solved   |          |
 | 3   |          |          |
 
 ## To Run
