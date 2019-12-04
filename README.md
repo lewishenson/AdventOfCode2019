@@ -6,8 +6,9 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | Day | Puzzle 1 | Puzzle 2 |
 |-----|----------|----------|
 | 1   | Solved   | Solved   |
-| 2   | Solved   |          |
+| 2   | Solved   | Solved   |
 | 3   |          |          |
+| 4   |          |          |
 
 ## To Run
 I've chosen to solve the puzzles using C# so make sure you've got .NET Core installed and just run the Console application.
