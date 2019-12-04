@@ -8,11 +8,11 @@ namespace AdventOfCode2019.Puzzles.Day04
     {
         public int Solve()
         {
-            var input = GetInput();
+            var (minimum, maximum) = GetInput();
 
             var validPasswords = new List<int>();
 
-            for (var password = input.minimum; password <= input.maximum; password++)
+            for (var password = minimum; password <= maximum; password++)
             {
                 if (IsPotentialPassword(password))
                 {
@@ -36,28 +36,17 @@ namespace AdventOfCode2019.Puzzles.Day04
 
         private bool IsPotentialPassword(int password)
         {
-            if (!HasTwoAdjacentDigitsTheSame(password))
-            {
-                return false;
-            }
-
             if (!DigitsNeverDecrease(password))
             {
                 return false;
             }
 
+            if (!HasTwoAdjacentDigitsTheSame(password))
+            {
+                return false;
+            }
+
             return true;
-        }
-
-        private bool HasTwoAdjacentDigitsTheSame(int password)
-        {
-            var digits = password.ToString().ToArray();
-
-            return digits[0] == digits[1]
-                || digits[1] == digits[2]
-                || digits[2] == digits[3]
-                || digits[3] == digits[4]
-                || digits[4] == digits[5];
         }
 
         private bool DigitsNeverDecrease(int password)
@@ -67,6 +56,13 @@ namespace AdventOfCode2019.Puzzles.Day04
             var orderedPassword = int.Parse(orderedPasswordString);
 
             return orderedPassword == password;
+        }
+
+        private bool HasTwoAdjacentDigitsTheSame(int password)
+        {
+            var groupedDigits = password.ToString().GroupBy(c => c);
+
+            return groupedDigits.Any(group => group.Count() > 1);
         }
     }
 }
