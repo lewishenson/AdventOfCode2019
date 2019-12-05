@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,8 +8,10 @@ namespace AdventOfCode2019.Puzzles.Day05
     {
         public int Solve()
         {
+            var computer = new IntcodeComputer();
+
             var program = GetProgram();
-            var output = RunProgram(program, 5);
+            var output = computer.Run(program, 5);
 
             return output;
         }
@@ -25,192 +26,198 @@ namespace AdventOfCode2019.Puzzles.Day05
 
             return program;
         }
-
-        private int RunProgram(IList<int> program, int input)
+        
+        private class IntcodeComputer
         {
-            var index = 0;
-            var continueRunning = true;
-            var programOutput = 0;
+            private int _pointer;
+            private IList<int> _program;
+            private int _input;
+            private int _output;
 
-            while (continueRunning)
+            public int Run(IList<int> program, int input)
             {
-                var opcode = program[index];
+                _pointer = 0;
+                _program = program;
+                _input = input;
+                _output = 0;
 
-                if (opcode == OpCodes.Halt)
+                while (true)
                 {
-                    return programOutput;
+                    var opcode = program[_pointer];
+                    _pointer++;
+
+                    if (opcode == OpCodes.Halt)
+                    {
+                        break;
+                    }
+
+                    var instruction = opcode % 100;
+
+                    switch (instruction)
+                    {
+                        case OpCodes.Add:
+                            AddOperation(opcode);
+                            break;
+                        
+                        case OpCodes.Multiply:
+                            MultiplyOperation(opcode);
+                            break;
+
+                        case OpCodes.StoreInput:
+                            InputOperation();
+                            break;
+
+                        case OpCodes.StoreOutput:
+                            OutputOperation();
+                            break;
+
+                        case OpCodes.JumpIfTrue:
+                            JumpIfTrueOperation(opcode);
+                            break;
+
+                        case OpCodes.JumpIfFalse:
+                            JumpIfFalseOperation(opcode);
+                            break;
+
+                        case OpCodes.LessThan:
+                            LessThanOperation(opcode);
+                            break;
+
+                        case OpCodes.Equal:
+                            EqualsOperation(opcode);
+                            break;
+                    }
                 }
 
-                var instruction = opcode % 100;
+                return _output;
+            }
+
+            private IReadOnlyList<int> GetParameterModes(int opcode, int? overrideThirdParameterMode = null)
+            {
                 var firstParameterMode = (opcode / 100) % 10;
                 var secondParameterMode = (opcode / 1000) % 10;
+                var thirdParameterMode = overrideThirdParameterMode ?? (opcode / 10000) % 10;
 
-                var processInstructionOutputs = ProcessInstruction(program, instruction, index, firstParameterMode, secondParameterMode, input);
+                return new List<int> { firstParameterMode, secondParameterMode, thirdParameterMode };
+            }
 
-                if (index == processInstructionOutputs.NewIndex)
+            private IReadOnlyList<int> GetParameterValues(IReadOnlyList<int> parameterModes, int numberOfParameters)
+            {
+                var parameterValues = new List<int>(numberOfParameters);
+
+                for (var i = 0; i < numberOfParameters; i++)
                 {
-                    var x = index;
+                    var parameterMode = parameterModes[i];
+
+                    switch (parameterMode)
+                    {
+                        case Modes.Position:
+                            var positionParameterValueIndex = _program[_pointer];
+                            var positionParameterValue = _program[positionParameterValueIndex];
+                            parameterValues.Add(positionParameterValue);
+                            break;
+
+                        case Modes.Immediate:
+                            var immediateParameterValue = _program[_pointer];
+                            parameterValues.Add(immediateParameterValue);
+                            break;
+                    }
+
+                    _pointer++;
                 }
 
-                index = processInstructionOutputs.NewIndex;
+                return parameterValues;
+            }
 
-                if (processInstructionOutputs.Output.HasValue)
+            private void AddOperation(int opcode)
+            {
+                var parameterModes = GetParameterModes(opcode, Modes.Immediate);
+                var parameterValues = GetParameterValues(parameterModes, 3);
+
+                var result = parameterValues[0] + parameterValues[1];
+                var resultIndex = parameterValues[2];
+                _program[resultIndex] = result;
+            }
+
+            private void MultiplyOperation(int opcode)
+            {
+                var parameterModes = GetParameterModes(opcode, Modes.Immediate);
+                var parameterValues = GetParameterValues(parameterModes, 3);
+
+                var result = parameterValues[0] * parameterValues[1];
+                var resultIndex = parameterValues[2];
+                _program[resultIndex] = result;
+            }
+
+            private void InputOperation()
+            {
+                var parameterModes = new List<int> { Modes.Immediate };
+                var parameterValues = GetParameterValues(parameterModes, 1);
+
+                var inputIndex = parameterValues[0];
+                _program[inputIndex] = _input;
+            }
+
+            private void OutputOperation()
+            {
+                var parameterModes = new List<int> { Modes.Immediate };
+                var parameterValues = GetParameterValues(parameterModes, 1);
+
+                var outputIndex = parameterValues[0];
+                _output = _program[outputIndex];
+            }
+
+            private void JumpIfTrueOperation(int opcode)
+            {
+                var parameterModes = GetParameterModes(opcode);
+                var parameterValues = GetParameterValues(parameterModes, 2);
+
+                var firstParameter = parameterValues[0];
+                if (firstParameter != 0)
                 {
-                    programOutput = processInstructionOutputs.Output.Value;
+                    var secondParameter = parameterValues[1];
+                    _pointer = secondParameter;
                 }
-
-                continueRunning = processInstructionOutputs.ContinueRunning;
             }
 
-            return programOutput;
-        }
-
-        private ProcessInstructionOutputs ProcessInstruction(IList<int> program, int instruction, int currentIndex, int firstParameterMode, int secondParameterMode, int input)
-        {
-            var result = new ProcessInstructionOutputs
+            private void JumpIfFalseOperation(int opcode)
             {
-                ContinueRunning = true,
-                NewIndex = currentIndex
-            };
+                var parameterModes = GetParameterModes(opcode);
+                var parameterValues = GetParameterValues(parameterModes, 2);
 
-            switch (instruction)
-            {
-                case OpCodes.Add:
-                    PerformAddition(program, currentIndex, firstParameterMode, secondParameterMode);
-                    result.NewIndex += 4;
-                    break;
-
-                case OpCodes.Multiply:
-                    PerformMultiplication(program, currentIndex, firstParameterMode, secondParameterMode);
-                    result.NewIndex += 4;
-                    break;
-
-                case OpCodes.StoreInput:
-                    WriteInput(program, currentIndex, input);
-                    result.NewIndex += 2;
-                    break;
-
-                case OpCodes.StoreOutput:
-                    result.Output = ReadOutput(program, currentIndex);
-                    result.NewIndex += 2;
-                    break;
-
-                case OpCodes.JumpIfTrue:
-                    PerformJumpIfTrue(program, currentIndex, firstParameterMode, secondParameterMode, result);
-                    break;
-
-                case OpCodes.JumpIfFalse:
-                    PerformJumpIfFalse(program, currentIndex, firstParameterMode, secondParameterMode, result);
-                    break;
-
-                case OpCodes.LessThan:
-                    PerformLessThan(program, currentIndex, firstParameterMode, secondParameterMode);
-                    result.NewIndex += 4;
-                    break;
-
-                case OpCodes.Equal:
-                    PerformEquals(program, currentIndex, firstParameterMode, secondParameterMode);
-                    result.NewIndex += 4;
-                    break;
+                var firstParameter = parameterValues[0];
+                if (firstParameter == 0)
+                {
+                    var secondParameter = parameterValues[1];
+                    _pointer = secondParameter;
+                }
             }
 
-            return result;
-        }
-
-        private void PerformAddition(IList<int> program, int operatorIndex, int firstParameterMode, int secondParameterMode)
-        {
-            PerformOperation(program, operatorIndex, firstParameterMode, secondParameterMode, (a, b) => a + b);
-        }
-
-        private void PerformMultiplication(IList<int> program, int operatorIndex, int firstParameterMode, int secondParameterMode)
-        {
-            PerformOperation(program, operatorIndex, firstParameterMode, secondParameterMode, (a, b) => a * b);
-        }
-
-        private void PerformOperation(IList<int> program, int operatorIndex, int firstParameterMode, int secondParameterMode, Func<int, int, int> operation)
-        {
-            var firstOperandIndex = program[operatorIndex + 1];
-            var firstOperand = firstParameterMode == Modes.Position ? program[firstOperandIndex] : firstOperandIndex;
-
-            var secondOperandIndex = program[operatorIndex + 2];
-            var secondOperand = secondParameterMode == Modes.Position ? program[secondOperandIndex] : secondOperandIndex;
-
-            var result = operation(firstOperand, secondOperand);
-            var resultIndex = program[operatorIndex + 3];
-            program[resultIndex] = result;
-        }
-
-        private void WriteInput(IList<int> program, int index, int input)
-        {
-            var storeIndex = program[index + 1];
-            program[storeIndex] = input;
-        }
-
-        private int ReadOutput(IList<int> program, int index)
-        {
-            var storeIndex = program[index + 1];
-
-            return program[storeIndex];
-        }
-
-        private void PerformJumpIfTrue(IList<int> program, int currentIndex, int firstParameterMode, int secondParameterMode, ProcessInstructionOutputs result)
-        {
-            var firstOperandIndex = program[currentIndex + 1];
-            var firstOperand = firstParameterMode == Modes.Position ? program[firstOperandIndex] : firstOperandIndex;
-            if (firstOperand != 0)
+            private void LessThanOperation(int opcode)
             {
-                var secondOperandIndex = program[currentIndex + 2];
-                var secondOperand = secondParameterMode == Modes.Position ? program[secondOperandIndex] : secondOperandIndex;
+                var parameterModes = GetParameterModes(opcode, Modes.Immediate);
+                var parameterValues = GetParameterValues(parameterModes, 3);
 
-                result.NewIndex = secondOperand;
+                var firstParameter = parameterValues[0];
+                var secondParameter = parameterValues[1];
+                var result = firstParameter < secondParameter ? 1 : 0;
+
+                var thirdParameter = parameterValues[2];
+                _program[thirdParameter] = result;
             }
-            else
+
+            private void EqualsOperation(int opcode)
             {
-                result.NewIndex += 3;
+                var parameterModes = GetParameterModes(opcode, Modes.Immediate);
+                var parameterValues = GetParameterValues(parameterModes, 3);
+
+                var firstParameter = parameterValues[0];
+                var secondParameter = parameterValues[1];
+                var result = firstParameter == secondParameter ? 1 : 0;
+
+                var thirdParameter = parameterValues[2];
+                _program[thirdParameter] = result;
             }
-        }
-
-        private void PerformJumpIfFalse(IList<int> program, int currentIndex, int firstParameterMode, int secondParameterMode, ProcessInstructionOutputs result)
-        {
-            var firstOperandIndex = program[currentIndex + 1];
-            var firstOperand = firstParameterMode == Modes.Position ? program[firstOperandIndex] : firstOperandIndex;
-            if (firstOperand == 0)
-            {
-                var secondOperandIndex = program[currentIndex + 2];
-                var secondOperand = secondParameterMode == Modes.Position ? program[secondOperandIndex] : secondOperandIndex;
-
-                result.NewIndex = secondOperand;
-            }
-            else
-            {
-                result.NewIndex += 3;
-            }
-        }
-
-        private void PerformLessThan(IList<int> program, int currentIndex, int firstParameterMode, int secondParameterMode)
-        {
-            var firstOperandIndex = program[currentIndex + 1];
-            var firstOperand = firstParameterMode == Modes.Position ? program[firstOperandIndex] : firstOperandIndex;
-
-            var secondOperandIndex = program[currentIndex + 2];
-            var secondOperand = secondParameterMode == Modes.Position ? program[secondOperandIndex] : secondOperandIndex;
-
-            var thirdOperandIndex = program[currentIndex + 3];
-            var thirdOperand = firstOperand < secondOperand ? 1 : 0;
-            program[thirdOperandIndex] = thirdOperand;
-        }
-
-        private void PerformEquals(IList<int> program, int currentIndex, int firstParameterMode, int secondParameterMode)
-        {
-            var firstOperandIndex = program[currentIndex + 1];
-            var firstOperand = firstParameterMode == Modes.Position ? program[firstOperandIndex] : firstOperandIndex;
-
-            var secondOperandIndex = program[currentIndex + 2];
-            var secondOperand = secondParameterMode == Modes.Position ? program[secondOperandIndex] : secondOperandIndex;
-
-            var thirdOperandIndex = program[currentIndex + 3];
-            var thirdOperand = firstOperand == secondOperand ? 1 : 0;
-            program[thirdOperandIndex] = thirdOperand;
         }
 
         private static class OpCodes
@@ -230,15 +237,6 @@ namespace AdventOfCode2019.Puzzles.Day05
         {
             public const int Position = 0;
             public const int Immediate = 1;
-        }
-
-        private class ProcessInstructionOutputs
-        {
-            public int NewIndex { get; set; }
-
-            public int? Output { get; set; }
-
-            public bool ContinueRunning { get; set; }
         }
     }
 }
