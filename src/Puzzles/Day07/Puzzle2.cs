@@ -20,7 +20,7 @@ namespace AdventOfCode2019.Puzzles.Day07
                 var program1 = GetProgram();
                 var input1 = new BlockingCollection<int>
                 {
-                    phaseSettingSequence.Item1, 
+                    phaseSettingSequence.Item1,
                     0
                 };
 
@@ -87,7 +87,6 @@ namespace AdventOfCode2019.Puzzles.Day07
                         computer4.Run(program4, input4, input5);
                     }
                 });
-                
 
                 var task5 = Task.Run(() =>
                 {
@@ -190,7 +189,7 @@ namespace AdventOfCode2019.Puzzles.Day07
                     }
 
                     var instruction = opcode % 100;
-                    
+
                     switch (instruction)
                     {
                         case OpCodes.Add:
