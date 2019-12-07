@@ -132,12 +132,7 @@ namespace AdventOfCode2019.Puzzles.Day07
                     }
 
                     var instruction = opcode % 100;
-
-                    if (opcode == 101)
-                    {
-                        var x = true;
-                    }
-
+                    
                     switch (instruction)
                     {
                         case OpCodes.Add:
