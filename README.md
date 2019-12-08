@@ -12,7 +12,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 5   | Solved   | Solved   |
 | 6   | Solved   | Solved   |
 | 7   | Solved   | Solved   |
-| 8   | Solved   |          |
+| 8   | Solved   | Solved   |
 | 9   |          |          |
 | 10  |          |          |
 | 11  |          |          |
