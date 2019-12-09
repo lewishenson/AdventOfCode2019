@@ -6,7 +6,7 @@ namespace AdventOfCode2019.Puzzles.Day04
 {
     public class Puzzle1 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             var (minimum, maximum) = GetInput();
 
