@@ -8,14 +8,14 @@ namespace AdventOfCode2019.Puzzles.Day09
 {
     public class Puzzle1 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             var program = GetProgram();
             var input = new BlockingCollection<long> { 1 };
             var output = new BlockingCollection<long>();
 
             var computer = new IntcodeComputer();
-            
+
             while (!computer.IsHalted)
             {
                 computer.Run(program, input, output);
@@ -23,9 +23,7 @@ namespace AdventOfCode2019.Puzzles.Day09
 
             var answer = output.Take();
 
-            Console.WriteLine(answer);
-
-            return (int)answer;
+            return answer;
         }
 
         private IList<long> GetProgram()
@@ -161,24 +159,13 @@ namespace AdventOfCode2019.Puzzles.Day09
 
             private long GetOutputParameterIndex(int parameterMode)
             {
-                long parameterIndex;
-
-                switch (parameterMode)
+                var parameterIndex = parameterMode switch
                 {
-                    case Modes.Position:
-                        parameterIndex = (int)_program[_pointer];
-                        break;
-
-                    case Modes.Immediate:
-                        throw new InvalidOperationException();
-
-                    case Modes.Relative:
-                        parameterIndex = (int)_program[_pointer] + _relativeBase;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(parameterMode), parameterMode, "Unsupported parameter mode");
-                }
+                    Modes.Position => (int) _program[_pointer],
+                    Modes.Immediate => throw new InvalidOperationException(),
+                    Modes.Relative => ((int) _program[_pointer] + _relativeBase),
+                    _ => throw new ArgumentOutOfRangeException(nameof(parameterMode), parameterMode, "Unsupported parameter mode")
+                };
 
                 _pointer++;
 
@@ -193,7 +180,7 @@ namespace AdventOfCode2019.Puzzles.Day09
                 var parameter2 = GetInputParameterValue(parameterModes[1]);
 
                 var result = parameter1 + parameter2;
-                
+
                 var parameter3 = (int)GetOutputParameterIndex(parameterModes[2]);
                 _program[parameter3] = result;
             }
@@ -257,7 +244,7 @@ namespace AdventOfCode2019.Puzzles.Day09
             private void LessThanOperation(int opcode)
             {
                 var parameterModes = GetParameterModes(opcode);
-                
+
                 var parameter1 = GetInputParameterValue(parameterModes[0]);
                 var parameter2 = GetInputParameterValue(parameterModes[1]);
 

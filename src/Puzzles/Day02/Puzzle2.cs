@@ -7,7 +7,7 @@ namespace AdventOfCode2019.Puzzles.Day02
 {
     public class Puzzle2 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             const int TargetOutput = 19690720;
 

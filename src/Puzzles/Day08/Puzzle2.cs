@@ -8,7 +8,7 @@ namespace AdventOfCode2019.Puzzles.Day08
 {
     public class Puzzle2 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             var imageData = File.ReadAllText("Puzzles\\Day08\\input.txt").Trim();
 

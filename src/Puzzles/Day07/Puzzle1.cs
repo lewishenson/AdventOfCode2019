@@ -7,7 +7,7 @@ namespace AdventOfCode2019.Puzzles.Day07
 {
     public class Puzzle1 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             var highestSignal = 0;
 

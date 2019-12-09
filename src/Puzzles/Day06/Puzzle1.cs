@@ -6,7 +6,7 @@ namespace AdventOfCode2019.Puzzles.Day06
 {
     public class Puzzle1 : IPuzzle
     {
-        public int Solve()
+        public object Solve()
         {
             var orbits = this.GetOrbits().ToList();
 
