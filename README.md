@@ -14,7 +14,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 7   | Solved   | Solved   |
 | 8   | Solved   | Solved   |
 | 9   | Solved   | Solved   |
-| 10  | Solved   |          |
+| 10  | Solved   | Solved   |
 | 11  |          |          |
 | 12  |          |          |
 | 13  |          |          |
