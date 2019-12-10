@@ -13,12 +13,20 @@ namespace AdventOfCode2019.Puzzles.Day10
             var asteroids = GetAsteroids().ToList();
 
             var bestVisibility = 0;
+            Point instantMonitoringStationLocation = default;
 
             foreach (var asteroid in asteroids)
             {
                 var visibility = GetVisibleAsteroidsCount(asteroid, asteroids);
-                bestVisibility = Math.Max(visibility, bestVisibility);
+
+                if (visibility > bestVisibility)
+                {
+                    bestVisibility = visibility;
+                    instantMonitoringStationLocation = asteroid;
+                }
             }
+
+            Console.WriteLine($"X: {instantMonitoringStationLocation.X}, Y: {instantMonitoringStationLocation.Y}");
 
             return bestVisibility;
         }
