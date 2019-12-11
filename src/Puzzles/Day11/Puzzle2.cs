@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdventOfCode2019.Puzzles.Day11
 {
-    public class Puzzle1 : IPuzzle
+    public class Puzzle2 : IPuzzle
     {
         public object Solve()
         {
             var program = GetProgram();
-            var input = new BlockingCollection<long> { 0 };
+            var input = new BlockingCollection<long> { 1 };
             var output = new BlockingCollection<long>();
 
             var computer = new IntcodeComputer();
@@ -68,7 +69,7 @@ namespace AdventOfCode2019.Puzzles.Day11
 
             Task.WaitAll(runTask, processTask);
 
-            var answer = colourMap.Count;
+            var answer = OutputColours(colourMap);
 
             return answer;
         }
@@ -121,6 +122,38 @@ namespace AdventOfCode2019.Puzzles.Day11
                 Directions.Up => new Point(currentPosition.X, currentPosition.Y + 1),
                 _ => throw new ArgumentOutOfRangeException(nameof(currentOrientation), currentOrientation, "Unexpected orientation.")
             };
+        }
+
+        private string OutputColours(Dictionary<Point, long> colourMap)
+        {
+            var minX = colourMap.Keys.Select(k => k.X).Min();
+            var maxX = colourMap.Keys.Select(k => k.X).Max();
+
+            var minY = colourMap.Keys.Select(k => k.Y).Min();
+            var maxY = colourMap.Keys.Select(k => k.Y).Max();
+
+            var output = new StringBuilder();
+
+            for (var y = maxY; y >= minY; y--)
+            {
+                for (var x = minX; x <= maxX; x++)
+                {
+                    var key = new Point(x, y);
+
+                    if (colourMap.TryGetValue(key, out var colour))
+                    {
+                        output.Append(colour == 0 ? ' ' : '#');
+                    }
+                    else
+                    {
+                        output.Append(' ');
+                    }
+                }
+
+                output.AppendLine();
+            }
+
+            return output.ToString();
         }
 
         private class IntcodeComputer
