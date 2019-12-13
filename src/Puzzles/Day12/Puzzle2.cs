@@ -3,32 +3,31 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2019.Puzzles.Day12
 {
-    public class Puzzle1 : IPuzzle
+    public class Puzzle2 : IPuzzle
     {
         public object Solve()
         {
+            var xAxisCycle = GetCycle(moon => moon.Position.X, moon => moon.Velocity.X);
+            var yAxisCycle = GetCycle(moon => moon.Position.Y, moon => moon.Velocity.Y);
+            var zAxisCycle = GetCycle(moon => moon.Position.Z, moon => moon.Velocity.Z);
+
+            var lcmInput = new List<long> { xAxisCycle, yAxisCycle, zAxisCycle };
+            var numberOfSteps = Lcm(lcmInput);
+
+            return numberOfSteps;
+        }
+
+        private int GetCycle(Func<Moon, int> getPosition, Func<Moon, int> getVelocity)
+        {
             var allMoons = GetMoons().ToList();
-
             var moonPairings = GetPairings(allMoons).ToList();
+            var cycle = RunCycle(allMoons, moonPairings, getPosition, getVelocity);
 
-            const int numberOfTimeSteps = 1000;
-
-            for (var index = 0; index < numberOfTimeSteps; index++)
-            {
-                foreach (var moonPairing in moonPairings)
-                {
-                    CalculateVelocities(moonPairing);
-                }
-
-                ApplyVelocities(allMoons);
-            }
-
-            var totalEnergy = CalculateTotalEnergy(allMoons);
-
-            return totalEnergy;
+            return cycle;
         }
 
         private IEnumerable<Moon> GetMoons()
@@ -45,33 +44,14 @@ namespace AdventOfCode2019.Puzzles.Day12
 
         private static Moon ParseLine(string line, int lineIndex)
         {
-            var strippedLine = line.Replace("<", string.Empty)
-                                   .Replace(">", string.Empty)
-                                   .Replace(" ", string.Empty);
+            var regex = new Regex("<x=(.+), y=(.+), z=(.+)>");
 
-            var coordinates = strippedLine.Split(',');
+            var match = regex.Match(line);
 
             var moon = new Moon(lineIndex);
-
-            foreach (var coordinate in coordinates)
-            {
-                var data = coordinate.Split('=');
-
-                switch (data[0])
-                {
-                    case "x":
-                        moon.Position.X = int.Parse(data[1]);
-                        break;
-
-                    case "y":
-                        moon.Position.Y = int.Parse(data[1]);
-                        break;
-
-                    case "z":
-                        moon.Position.Z = int.Parse(data[1]);
-                        break;
-                }
-            }
+            moon.Position.X = int.Parse(match.Groups[1].Value);
+            moon.Position.Y = int.Parse(match.Groups[2].Value);
+            moon.Position.Z = int.Parse(match.Groups[3].Value);
 
             return moon;
         }
@@ -88,6 +68,41 @@ namespace AdventOfCode2019.Puzzles.Day12
                     yield return new Tuple<Moon, Moon>(moon1, moon2);
                 }
             }
+        }
+
+        private int RunCycle(
+            IReadOnlyList<Moon> allMoons,
+            IReadOnlyCollection<Tuple<Moon, Moon>> moonPairings,
+            Func<Moon, int> getPosition,
+            Func<Moon, int> getVelocity)
+        {
+            int index;
+
+            // String not as fast as a 8-tuple but don't want to be hard coding lengths.
+            var previousStates = new HashSet<string>();
+
+            for (index = 0; index < int.MaxValue; index++)
+            {
+                var positions = allMoons.Select(getPosition);
+                var velocities = allMoons.Select(getVelocity);
+                var currentState = string.Join('_', positions.Concat(velocities));
+
+                if (previousStates.Contains(currentState))
+                {
+                    break;
+                }
+
+                previousStates.Add(currentState);
+
+                foreach (var moonPairing in moonPairings)
+                {
+                    CalculateVelocities(moonPairing);
+                }
+
+                ApplyVelocities(allMoons);
+            }
+
+            return index;
         }
 
         private void CalculateVelocities(Tuple<Moon, Moon> moonPairing)
@@ -134,22 +149,6 @@ namespace AdventOfCode2019.Puzzles.Day12
             }
         }
 
-        private int CalculateTotalEnergy(IEnumerable<Moon> moons)
-        {
-            var totalEnergy = 0;
-
-            foreach (var moon in moons)
-            {
-                var potentialEnergy = Math.Abs(moon.Position.X) + Math.Abs(moon.Position.Y) + Math.Abs(moon.Position.Z);
-                var kineticEnergy = Math.Abs(moon.Velocity.X) + Math.Abs(moon.Velocity.Y) + Math.Abs(moon.Velocity.Z);
-                var moonEnergy = potentialEnergy * kineticEnergy;
-
-                totalEnergy += moonEnergy;
-            }
-
-            return totalEnergy;
-        }
-
         [DebuggerDisplay("{" + nameof(Id) + "}")]
         private class Moon
         {
@@ -180,6 +179,32 @@ namespace AdventOfCode2019.Puzzles.Day12
                 X += adjustment.X;
                 Y += adjustment.Y;
                 Z += adjustment.Z;
+            }
+        }
+
+        // Based on https://stackoverflow.com/a/29717490
+        private static long Lcm(IEnumerable<long> numbers)
+        {
+            return numbers.Aggregate(Lcm);
+        }
+
+        private static long Lcm(long a, long b)
+        {
+            return Math.Abs(a * b) / Gcd(a, b);
+        }
+
+        private static long Gcd(long a, long b)
+        {
+            while (true)
+            {
+                if (b == 0)
+                {
+                    return a;
+                }
+
+                var a1 = a;
+                a = b;
+                b = a1 % b;
             }
         }
     }
