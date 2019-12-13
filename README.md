@@ -32,9 +32,9 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 25  |          |                     |
 
 ## To Run
-I've chosen to solve the puzzles using C# so make sure you've got .NET Core 3.0 installed and just run the Console application.
+I've chosen to solve the puzzles using C# so make sure you've got .NET Core 3.1 installed and just run the Console application.
 
 The application will prompt you to enter the day and puzzle numbers. (Note I've deliberately included no real error handling!)
 
 ## Notes
-1. Had to use hints on the [subreddit](https://www.reddit.com/r/adventofcode/) to consider using the least common multiple. Hardest challenge yet.
+1. Read hints on the [subreddit](https://www.reddit.com/r/adventofcode/) to consider using the least common multiple. Hardest challenge yet.
