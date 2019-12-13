@@ -23,12 +23,19 @@ namespace AdventOfCode2019
             }
             else
             {
-                var stopwatch = Stopwatch.StartNew();
-                var answer = puzzle.Solve();
-                stopwatch.Stop();
+                try
+                {
+                    var stopwatch = Stopwatch.StartNew();
+                    var answer = puzzle.Solve();
+                    stopwatch.Stop();
 
-                Console.WriteLine($"Answer: (calculated in {stopwatch.ElapsedMilliseconds}ms)");
-                Console.WriteLine(answer);
+                    Console.WriteLine($"Answer: (calculated in {stopwatch.ElapsedMilliseconds}ms)");
+                    Console.WriteLine(answer);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
             }
         }
     }
