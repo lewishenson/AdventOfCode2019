@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdventOfCode2019.Puzzles.Day13
 {
-    public class Puzzle1 : IPuzzle
+    public class Puzzle2 : IPuzzle
     {
         public object Solve()
         {
@@ -16,26 +18,65 @@ namespace AdventOfCode2019.Puzzles.Day13
 
             var computer = new IntcodeComputer();
 
-            while (!computer.IsHalted)
+            var runTask = Task.Run(() =>
             {
-                computer.Run(program, input, output);
-            }
-
-            var tiles = output.ToArray();
-
-            var blockTileCount = 0;
-
-            for (var i = 2; i < tiles.Length; i += 3)
-            {
-                var tile = tiles[i];
-
-                if (tile == 2)
+                while (!computer.IsHalted)
                 {
-                    blockTileCount++;
+                    computer.Run(program, input, output);
                 }
-            }
+            });
 
-            return blockTileCount;
+            long score = -1;
+
+            var outputTask = Task.Run(() =>
+            {
+                var screen = new Dictionary<Point, string>();
+
+                var buffer = new List<long>();
+
+                while (!computer.IsHalted)
+                {
+                    if (!output.TryTake(out var result, TimeSpan.FromMilliseconds(1)))
+                    {
+                        //DrawScreen(screen);
+
+                        var joystickInput = CalculateJoystickInput(screen);
+                        input.Add(joystickInput);
+                    }
+                    else
+                    {
+                        buffer.Add(result);
+
+                        if (buffer.Count != 3)
+                        {
+                            continue;
+                        }
+
+                        var x = (int)buffer[0];
+                        var y = (int)buffer[1];
+                        var tile = (int)buffer[2];
+
+                        var isScore = x == -1 && y == 0;
+                        if (isScore)
+                        {
+                            score = tile;
+                        }
+                        else
+                        {
+                            var coordinate = new Point(x, y);
+
+                            var displayTile = ConvertTileToDisplayValue(tile);
+                            screen[coordinate] = displayTile;
+                        }
+
+                        buffer.Clear();
+                    }
+                }
+            });
+
+            Task.WaitAll(runTask, outputTask);
+            
+            return score;
         }
 
         private IList<long> GetProgram()
@@ -46,10 +87,75 @@ namespace AdventOfCode2019.Puzzles.Day13
                                .Select(long.Parse)
                                .ToList();
 
+            // As instructed
+            program[0] = 2;
+
             var padding = Enumerable.Repeat((long)0, 10000 - program.Count);
             program.AddRange(padding);
 
             return program;
+        }
+
+        private string ConvertTileToDisplayValue(int tile)
+        {
+            return tile switch
+            {
+                0 => " ",
+                1 => "#",
+                2 => "+",
+                3 => "_",
+                4 => ".",
+                _ => throw new ArgumentOutOfRangeException(nameof(tile), tile, "Unexpected tile")
+            };
+        }
+
+        private void DrawScreen(IReadOnlyDictionary<Point, string> pixels)
+        {
+            var minX = pixels.Keys.Min(coordinate => coordinate.X);
+            var maxX = pixels.Keys.Max(coordinate => coordinate.X);
+
+            var minY = pixels.Keys.Min(coordinate => coordinate.Y);
+            var maxY = pixels.Keys.Max(coordinate => coordinate.Y);
+
+            for (var y = minY; y <= maxY; y++)
+            {
+                for (var x = minX; x <= maxX; x++)
+                {
+                    var point = new Point(x, y);
+
+                    if (!pixels.TryGetValue(point, out var pixel))
+                    {
+                        pixel = " ";
+                    }
+
+                    Console.Write(pixel);
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(new string('@', maxX));
+            Console.WriteLine();
+        }
+
+        private int CalculateJoystickInput(IReadOnlyDictionary<Point, string> screen)
+        {
+            var ballX = screen.Where(p => p.Value == ".").Select(p => p.Key.X).SingleOrDefault();
+            var paddleX = screen.Where(p => p.Value == "_").Select(p => p.Key.X).SingleOrDefault();
+
+            var joystickInput = JoystickInput.Neutral;
+
+            if (ballX < paddleX)
+            {
+                joystickInput = JoystickInput.Left;
+            }
+            else if (ballX > paddleX)
+            {
+                joystickInput = JoystickInput.Right;
+            }
+
+            return joystickInput;
         }
 
         private class IntcodeComputer
@@ -307,6 +413,13 @@ namespace AdventOfCode2019.Puzzles.Day13
             public const int Position = 0;
             public const int Immediate = 1;
             public const int Relative = 2;
+        }
+
+        private static class JoystickInput
+        {
+            public const int Left = -1;
+            public const int Neutral = 0;
+            public const int Right = 1;
         }
     }
 }
