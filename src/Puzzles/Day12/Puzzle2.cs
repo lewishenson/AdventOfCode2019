@@ -32,7 +32,7 @@ namespace AdventOfCode2019.Puzzles.Day12
 
         private IEnumerable<Moon> GetMoons()
         {
-            var lines = File.ReadAllLines("Puzzles\\Day12\\input.txt");
+            var lines = File.ReadAllLines("Puzzles/Day12/input.txt");
 
             for (var lineIndex = 0; lineIndex < lines.Length; lineIndex++)
             {

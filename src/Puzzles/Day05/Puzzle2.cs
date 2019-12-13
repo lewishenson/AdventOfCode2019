@@ -18,7 +18,7 @@ namespace AdventOfCode2019.Puzzles.Day05
 
         private IList<int> GetProgram()
         {
-            var input = File.ReadAllText("Puzzles\\Day05\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day05/input.txt");
 
             var program = input.Split(',')
                                .Select(int.Parse)
@@ -26,7 +26,7 @@ namespace AdventOfCode2019.Puzzles.Day05
 
             return program;
         }
-        
+
         private class IntcodeComputer
         {
             private int _pointer;
@@ -58,7 +58,7 @@ namespace AdventOfCode2019.Puzzles.Day05
                         case OpCodes.Add:
                             AddOperation(opcode);
                             break;
-                        
+
                         case OpCodes.Multiply:
                             MultiplyOperation(opcode);
                             break;

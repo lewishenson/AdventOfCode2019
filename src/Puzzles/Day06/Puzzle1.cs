@@ -36,7 +36,7 @@ namespace AdventOfCode2019.Puzzles.Day06
 
         private IEnumerable<OrbitData> GetOrbits()
         {
-            var lines = File.ReadAllLines("Puzzles\\Day06\\input.txt");
+            var lines = File.ReadAllLines("Puzzles/Day06/input.txt");
 
             foreach (var line in lines)
             {

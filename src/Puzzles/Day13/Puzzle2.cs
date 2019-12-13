@@ -75,13 +75,13 @@ namespace AdventOfCode2019.Puzzles.Day13
             });
 
             Task.WaitAll(runTask, outputTask);
-            
+
             return score;
         }
 
         private IList<long> GetProgram()
         {
-            var input = File.ReadAllText("Puzzles\\Day13\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day13/input.txt");
 
             var program = input.Split(',')
                                .Select(long.Parse)
@@ -279,9 +279,9 @@ namespace AdventOfCode2019.Puzzles.Day13
             {
                 var parameterIndex = parameterMode switch
                 {
-                    Modes.Position => (int) _program[_pointer],
+                    Modes.Position => (int)_program[_pointer],
                     Modes.Immediate => throw new InvalidOperationException(),
-                    Modes.Relative => ((int) _program[_pointer] + _relativeBase),
+                    Modes.Relative => ((int)_program[_pointer] + _relativeBase),
                     _ => throw new ArgumentOutOfRangeException(nameof(parameterMode), parameterMode, "Unsupported parameter mode")
                 };
 

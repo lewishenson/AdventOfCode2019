@@ -17,7 +17,7 @@ namespace AdventOfCode2019.Puzzles.Day02
 
         private IList<int> GetProgram()
         {
-            var input = File.ReadAllText("Puzzles\\Day02\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day02/input.txt");
 
             var program = input.Split(',')
                                .Select(int.Parse)

@@ -27,7 +27,7 @@ namespace AdventOfCode2019.Puzzles.Day03
 
         private IEnumerable<IReadOnlyList<Move>> GetPaths()
         {
-            var lines = File.ReadAllLines("Puzzles\\Day03\\input.txt");
+            var lines = File.ReadAllLines("Puzzles/Day03/input.txt");
 
             foreach (var line in lines)
             {

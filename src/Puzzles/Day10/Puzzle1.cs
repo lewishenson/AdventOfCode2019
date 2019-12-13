@@ -33,7 +33,7 @@ namespace AdventOfCode2019.Puzzles.Day10
 
         private IEnumerable<Point> GetAsteroids()
         {
-            var lines = File.ReadAllLines("Puzzles\\Day10\\input.txt");
+            var lines = File.ReadAllLines("Puzzles/Day10/input.txt");
 
             for (var y = 0; y < lines.Length; y++)
             {

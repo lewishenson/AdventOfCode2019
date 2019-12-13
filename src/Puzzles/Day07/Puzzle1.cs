@@ -98,7 +98,7 @@ namespace AdventOfCode2019.Puzzles.Day07
 
         private IList<int> GetProgram()
         {
-            var input = File.ReadAllText("Puzzles\\Day07\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day07/input.txt");
 
             var program = input.Split(',')
                                .Select(int.Parse)
@@ -132,7 +132,7 @@ namespace AdventOfCode2019.Puzzles.Day07
                     }
 
                     var instruction = opcode % 100;
-                    
+
                     switch (instruction)
                     {
                         case OpCodes.Add:
