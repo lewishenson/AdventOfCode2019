@@ -25,7 +25,7 @@ namespace AdventOfCode2019.Puzzles.Day04
 
         private (int minimum, int maximum) GetInput()
         {
-            var input = File.ReadAllText("Puzzles\\Day04\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day04/input.txt");
 
             var numbers = input.Split('-')
                                .Select(int.Parse)

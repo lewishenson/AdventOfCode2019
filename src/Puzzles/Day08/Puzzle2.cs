@@ -10,7 +10,7 @@ namespace AdventOfCode2019.Puzzles.Day08
     {
         public object Solve()
         {
-            var imageData = File.ReadAllText("Puzzles\\Day08\\input.txt").Trim();
+            var imageData = File.ReadAllText("Puzzles/Day08/input.txt").Trim();
 
             const int width = 25;
             const int height = 6;

@@ -7,7 +7,7 @@ namespace AdventOfCode2019.Puzzles.Day01
     {
         public object Solve()
         {
-            var masses = File.ReadAllLines("Puzzles\\Day01\\input.txt");
+            var masses = File.ReadAllLines("Puzzles/Day01/input.txt");
 
             var totalFuel = masses.Select(int.Parse)
                                   .Select(CalculateFuel)

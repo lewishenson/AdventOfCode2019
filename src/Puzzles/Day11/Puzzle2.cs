@@ -44,7 +44,7 @@ namespace AdventOfCode2019.Puzzles.Day11
                     colourMap[currentPosition] = colour;
 
                     var direction = output.Take();
-                    
+
                     switch (direction)
                     {
                         case Directions.Left:
@@ -76,7 +76,7 @@ namespace AdventOfCode2019.Puzzles.Day11
 
         private IList<long> GetProgram()
         {
-            var input = File.ReadAllText("Puzzles\\Day11\\input.txt");
+            var input = File.ReadAllText("Puzzles/Day11/input.txt");
 
             var program = input.Split(',')
                                .Select(long.Parse)
@@ -277,9 +277,9 @@ namespace AdventOfCode2019.Puzzles.Day11
             {
                 var parameterIndex = parameterMode switch
                 {
-                    Modes.Position => (int) _program[_pointer],
+                    Modes.Position => (int)_program[_pointer],
                     Modes.Immediate => throw new InvalidOperationException(),
-                    Modes.Relative => ((int) _program[_pointer] + _relativeBase),
+                    Modes.Relative => ((int)_program[_pointer] + _relativeBase),
                     _ => throw new ArgumentOutOfRangeException(nameof(parameterMode), parameterMode, "Unsupported parameter mode")
                 };
 
