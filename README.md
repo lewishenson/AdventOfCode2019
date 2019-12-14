@@ -18,7 +18,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 11  | Solved   | Solved              |
 | 12  | Solved   | Solved<sup>1</sup>  |
 | 13  | Solved   | Solved              |
-| 14  |          |                     |
+| 14  | Solved   |                     |
 | 15  |          |                     |
 | 16  |          |                     |
 | 17  |          |                     |
