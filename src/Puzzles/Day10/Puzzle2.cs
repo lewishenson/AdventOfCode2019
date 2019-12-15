@@ -37,7 +37,7 @@ namespace AdventOfCode2019.Puzzles.Day10
                 }
             }
 
-            var twoHundredthAsteroid = destroyedAsteroids.ElementAt(199);
+            var twoHundredthAsteroid = destroyedAsteroids[199];
 
             var answer = (twoHundredthAsteroid.X * 100) + twoHundredthAsteroid.Y;
 
