@@ -18,7 +18,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 11  | Solved   | Solved              |
 | 12  | Solved   | Solved<sup>1</sup>  |
 | 13  | Solved   | Solved              |
-| 14  | Solved   |                     |
+| 14  | Solved   | Solved<sup>2</sup>  |
 | 15  |          |                     |
 | 16  |          |                     |
 | 17  |          |                     |
@@ -38,3 +38,4 @@ The application will prompt you to enter the day and puzzle numbers. (Note I've 
 
 ## Notes
 1. Read hints on the [subreddit](https://www.reddit.com/r/adventofcode/) to consider using the least common multiple. Hardest challenge yet.
+2. Read hints on the [subreddit](https://www.reddit.com/r/adventofcode/) to avoid brute force approach.
