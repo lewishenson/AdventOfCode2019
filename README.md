@@ -19,7 +19,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 12  | Solved   | Solved<sup>1</sup>  |
 | 13  | Solved   | Solved              |
 | 14  | Solved   | Solved<sup>2</sup>  |
-| 15  | Solved   |                     |
+| 15  | Solved   | Not attempted       |
 | 16  |          |                     |
 | 17  |          |                     |
 | 18  |          |                     |
