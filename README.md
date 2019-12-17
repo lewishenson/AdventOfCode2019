@@ -21,7 +21,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 14  | Solved   | Solved<sup>2</sup>        |
 | 15  | Solved   | Not attempted<sup>3</sup> |
 | 16  | Solved   | Solved<sup>4</sup>        |
-| 17  |          |                           |
+| 17  | Solved   |                           |
 | 18  |          |                           |
 | 19  |          |                           |
 | 20  |          |                           |
