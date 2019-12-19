@@ -1,7 +1,7 @@
 # Advent of Code 2019
 My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 
-## My Progress
+## My Progress (33*/36*)
 
 | Day | Puzzle 1                  | Puzzle 2                  |
 |-----|---------------------------|---------------------------|
@@ -21,7 +21,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 14  | Solved                    | Solved<sup>2</sup>        |
 | 15  | Solved                    | Not attempted<sup>3</sup> |
 | 16  | Solved                    | Solved<sup>4</sup>        |
-| 17  | Solved                    | Not attempted<sup>3</sup> |
+| 17  | Solved                    | Solved                    |
 | 18  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
 | 19  |                           |                           |
 | 20  |                           |                           |
