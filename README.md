@@ -26,7 +26,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 19  | Solved                    | Solved                    |
 | 20  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
 | 21  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
-| 22  | Solved                    |                           |
+| 22  | Solved                    | Not attempted<sup>3</sup> |
 | 23  |                           |                           |
 | 24  |                           |                           |
 | 25  |                           |                           |
