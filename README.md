@@ -1,7 +1,7 @@
 # Advent of Code 2019
 My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 
-## My Progress (36*/48*)
+## My Progress (36*/50*)
 
 | Day | Puzzle 1                  | Puzzle 2                  |
 |-----|---------------------------|---------------------------|
@@ -29,7 +29,7 @@ My solutions to the [Advent of Code 2019](https://adventofcode.com/2019).
 | 22  | Solved                    | Not attempted<sup>3</sup> |
 | 23  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
 | 24  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
-| 25  |                           |                           |
+| 25  | Not attempted<sup>5</sup> | Not attempted<sup>5</sup> |
 
 ## To Run
 I've chosen to solve the puzzles using C# so make sure you've got .NET Core 3.1 installed and just run the Console application.
